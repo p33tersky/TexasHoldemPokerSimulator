@@ -1,4 +1,3 @@
-import javax.sound.midi.Sequence;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,6 +9,9 @@ public class SequenceCheckers {
         return (int) cards.stream().filter(c -> c.getSuit().equals(suit)).count();
     }
 
+    public int pictureCounter(String picture, List<Card> cards) {
+        return (int) cards.stream().filter(c -> c.getPicture().equals(picture)).count();
+    }
 
     public Map<String, Boolean> isFlushMap(List<Card> cards) {
         Map<String, Boolean> flushMap = new HashMap<>();
@@ -33,10 +35,6 @@ public class SequenceCheckers {
             }
         }
         return false;
-    }
-
-    public int pictureCounter(String picture, List<Card> cards) {
-        return (int) cards.stream().filter(c -> c.getPicture().equals(picture)).count();
     }
 
     public boolean isNOfAKind(int n, List<Card> cards) {
@@ -118,7 +116,7 @@ public class SequenceCheckers {
         for (int n = 2; n < 6; n++) {
             int finalN = n;
             boolean isN = cards.stream().anyMatch(c -> c.getPicture().equals(String.valueOf(finalN)));
-            if (!isN){
+            if (!isN) {
                 return false;
             }
         }
@@ -127,7 +125,7 @@ public class SequenceCheckers {
 
 
     public boolean isStraight(List<Card> cards) {
-        List<Card> sortedCardsByValues = cardService.sortedListOfCardsByItsValue(cards);
+        List<Card> sortedCardsByValues = cardService.sortedListOfCardsByItsValue(true, cards);
         List<Card> cardsFrom_I_to_IplusJ = new ArrayList<>();
 
 

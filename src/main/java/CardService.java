@@ -48,25 +48,35 @@ public class CardService {
         return cardWithHighestValue;
     }
 
-    public List<Card> getFiveHighestCards(List<Card> cards){
-        List<Card> fiveCards = new ArrayList<>();
-        List<Card> allCards = new ArrayList<>(cards);
-        for (int i = 0; i < 5; i++) {
-            Card highestCard = getCardWithTheHighestValue(allCards);
-            fiveCards.add(highestCard);
-            allCards.remove(highestCard);
-        }
-        return fiveCards;
-    }
-
-    public List<Card> sortedListOfCardsByItsValue(List<Card> cards){
+    public List<Card> sortedListOfCardsByItsValue(boolean ascending, List<Card> cards){
         List<Card> cardsToBeSorted = new ArrayList<>(cards);
         Comparator<Card> cardComparator = (card1, card2) -> {
             int value1 = cardsValue().get(card1.getPicture());
             int value2 = cardsValue().get(card2.getPicture());
-            return Integer.compare(value1, value2);
+            if (ascending) return Integer.compare(value1, value2);
+            return Integer.compare(value2,value1);
         };
         cardsToBeSorted.sort(cardComparator);
         return cardsToBeSorted;
     }
+
+    public List<Card> getNHighestCards(int n, List<Card> cards){
+        List<Card> sortedCarts= sortedListOfCardsByItsValue(false, cards);
+        List<Card> nCards = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            nCards.add(sortedCarts.get(i));
+        }
+        return nCards;
+    }
+    public List<Card> getFiveHighestCards(List<Card> cards){
+        return getNHighestCards(5, cards);
+    }
+
+    public List<Card> getThreeHighestCards(List<Card> cards){
+        return getNHighestCards(3, cards);
+    }
+    public List<Card> getTwoHighestCards(List<Card> cards){
+        return getNHighestCards(2, cards);
+    }
+
 }
