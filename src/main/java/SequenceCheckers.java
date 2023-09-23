@@ -5,28 +5,9 @@ public class SequenceCheckers {
 
     CardService cardService = new CardService();
 
-    public int suitCounter(String suit, List<Card> cards) {
-        return (int) cards.stream().filter(c -> c.getSuit().equals(suit)).count();
-    }
-
-    public int pictureCounter(String picture, List<Card> cards) {
-        return (int) cards.stream().filter(c -> c.getPicture().equals(picture)).count();
-    }
-
-    public Map<String, Boolean> isFlushMap(List<Card> cards) {
-        Map<String, Boolean> flushMap = new HashMap<>();
-        List<String> suits = cardService.suits();
-
-        for (String suit : suits) {
-            int suitChecker = suitCounter(suit, cards);
-            flushMap.put(suit, suitChecker > 4);
-        }
-
-        return flushMap;
-    }
 
     public boolean isFlush(List<Card> cards) {
-        Map<String, Boolean> flashMap = isFlushMap(cards);
+        Map<String, Boolean> flashMap = cardService.isFlushMap(cards);
         List<String> suits = cardService.suits();
 
         for (String suit : suits) {
@@ -37,34 +18,20 @@ public class SequenceCheckers {
         return false;
     }
 
-    public boolean isNOfAKind(int n, List<Card> cards) {
-        int counter;
-        for (int i = 0; i < cards.size(); i++) {
-            counter = pictureCounter(cards.get(i).getPicture(), cards);
-            if (counter == n) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     public boolean isFourOfAKind(List<Card> cards) {
-        return isNOfAKind(4, cards);
+        return cardService.isNOfAKind(4, cards);
     }
 
     public boolean isThreeOfAKind(List<Card> cards) {
-        return isNOfAKind(3, cards);
+        return cardService.isNOfAKind(3, cards);
     }
 
     public boolean isPair(List<Card> cards) {
-        return isNOfAKind(2, cards);
+        return cardService.isNOfAKind(2, cards);
     }
 
-    public List<Card> listOfCardsWithRemovedCardsWithGivenPicture(String picture, List<Card> allCards) {
-        List<Card> listToBeReduced = new ArrayList<>(allCards);
-        listToBeReduced.removeIf(card -> card.getPicture().equals(picture));
-        return listToBeReduced;
-    }
 
     public boolean isPairInCardsWithoutNSameCards(int n, List<Card> cards) {
         List<Card> playerCards = new ArrayList<>(cards);
@@ -72,12 +39,12 @@ public class SequenceCheckers {
         int counter;
         String picture;
 
-        if (isNOfAKind(n, playerCards)) {
+        if (cardService.isNOfAKind(n, playerCards)) {
             for (int i = 0; i < playerCards.size(); i++) {
                 picture = playerCards.get(i).getPicture();
-                counter = pictureCounter(picture, playerCards);
+                counter = cardService.pictureCounter(picture, playerCards);
                 if (counter == n) {
-                    playerCards = listOfCardsWithRemovedCardsWithGivenPicture(picture, playerCards);
+                    playerCards = cardService.listOfCardsWithRemovedCardsWithGivenPicture(picture, playerCards);
                     break;
                 }
             }
@@ -146,7 +113,7 @@ public class SequenceCheckers {
         if (!isFlush(cards)) {
             return false;
         }
-        Map<String, Boolean> flushMap = isFlushMap(cards);
+        Map<String, Boolean> flushMap = cardService.isFlushMap(cards);
         String flushSuit = "";
         List<String> colors = cardService.suits();
         for (String color : colors) {

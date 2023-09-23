@@ -1,9 +1,10 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PokerSubsequenceComparison {
     CardService cardService = new CardService();
-    SequenceCheckers sequenceCheckers = new SequenceCheckers();
+    BestSequenceReturner bestSequenceReturner = new BestSequenceReturner();
 
     public int compareNSortedCards(int n, List<Card> cards1, List<Card> cards2) {
         List<Card> nHighestCardsFromPosition1 = cardService.getNHighestCards(n, cards1);
@@ -23,32 +24,44 @@ public class PokerSubsequenceComparison {
         return compareNSortedCards(5, firstPositionCards, secondPositionCards);
     }
 
-    public List<Card> getPair(List<Card> cards) {
-        String picture = "";
-        for (int i = 0; i < cards.size(); i++) {
-            String pictureOfICard = cards.get(i).getPicture();
-            if (sequenceCheckers.pictureCounter(pictureOfICard, cards) == 2) {
-                picture = pictureOfICard;
-            }
-        }
-        String finalPicture = picture;
-        return cards.stream().filter(c -> c.getPicture().equals(finalPicture)).collect(Collectors.toList());
+    public int compareValueOfNOfAKind(List<Card> firstPair, List<Card> secondPair) {
+        return cardService.compareValueOfTwoCards(firstPair.get(0), secondPair.get(0));
     }
 
     public int compareIfBothSequencesArePairs(List<Card> firstPositionCards, List<Card> secondPositionCards) {
-        List<Card> firstHandPair = getPair(firstPositionCards);
-        List<Card> secondHandPair = getPair(secondPositionCards);
-        String firstHandPairPicture = firstHandPair.get(0).getPicture();
-        String secondHandPairPicture = secondHandPair.get(0).getPicture();
-        int compareValue = 0;
-        int valueOfComparingPairsPictures = cardService.compareValueOfTwoCards(firstHandPair.get(0), secondHandPair.get(0));
-        if (valueOfComparingPairsPictures == 0) {
-            List<Card> cardsOfFirstPositionWithoutPair = sequenceCheckers.listOfCardsWithRemovedCardsWithGivenPicture(firstHandPairPicture, firstPositionCards);
-            List<Card> cardsOfSecondPositionWithoutPair = sequenceCheckers.listOfCardsWithRemovedCardsWithGivenPicture(secondHandPairPicture, secondPositionCards);
-            List<Card> threeSortedCards1 = cardService.sortedListOfCardsByItsValue(false, cardsOfFirstPositionWithoutPair);
-            List<Card> threeSortedCards2 = cardService.sortedListOfCardsByItsValue(false, cardsOfSecondPositionWithoutPair);
-            compareValue = compareNSortedCards(3, threeSortedCards1, threeSortedCards2);
-        } else compareValue = valueOfComparingPairsPictures;
+        List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsOnePair(firstPositionCards);
+        List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsOnePair(secondPositionCards);
+        int compareValue = compareValueOfNOfAKind(firstPlayerSequence, secondPlayerSequence);
+        if (compareValue == 0) {
+            for (int i = 2; i < 5; i++) {
+                int cardsCompareValue = cardService.compareValueOfTwoCards(firstPlayerSequence.get(i), secondPlayerSequence.get(i));
+                if (cardsCompareValue != 0) {
+                    compareValue = cardsCompareValue;
+                    break;
+                }
+            }
+        }
+        return compareValue;
+
+    }
+
+
+    public int compareIfBothSequencesAreTwoPairs(List<Card> firstPositionCards, List<Card> secondPositionCards) {
+        List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsTwoPairs(firstPositionCards);
+        List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsTwoPairs(secondPositionCards);
+        int compareValue = cardService.compareValueOfTwoCards(firstPlayerSequence.get(0), secondPlayerSequence.get(0));
+        if (compareValue == 0) {
+            compareValue = cardService.compareValueOfTwoCards(firstPlayerSequence.get(2), secondPlayerSequence.get(2));
+            if (compareValue == 0) {
+                compareValue = cardService.compareValueOfTwoCards(firstPlayerSequence.get(4), secondPlayerSequence.get(4));
+            }
+        }
         return compareValue;
     }
+
+    public List<Card> getThreeOfAKind(List<Card> cards) {
+        return cardService.getNOfAKind(3, cards);
+    }
+
+
 }
