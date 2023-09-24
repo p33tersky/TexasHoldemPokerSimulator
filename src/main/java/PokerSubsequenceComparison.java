@@ -1,66 +1,74 @@
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PokerSubsequenceComparison {
     CardService cardService = new CardService();
     BestSequenceReturner bestSequenceReturner = new BestSequenceReturner();
 
-    public int compareNSortedCards(int n, List<Card> cards1, List<Card> cards2) {
-        List<Card> nHighestCardsFromPosition1 = cardService.getNHighestCards(n, cards1);
-        List<Card> nHighestCardsFromPosition2 = cardService.getNHighestCards(n, cards2);
-        int valueOfComparingPictures = 0;
-        for (int i = 0; i < n; i++) {
-            int compareValue = cardService.compareValueOfTwoCards(nHighestCardsFromPosition1.get(i), nHighestCardsFromPosition2.get(i));
+    public int compareValueIfBestSequenceIsReturnedAndBothSequencesAreTheSame(List<Card> firstPlayerSequence, List<Card> secondPlayerSequence) {
+        int compareValue = 0;
+        for (int i = 0; i < 5; i++) {
+            compareValue = cardService.compareValueOfTwoCards(firstPlayerSequence.get(i), secondPlayerSequence.get(i));
             if (compareValue != 0) {
-                valueOfComparingPictures = compareValue;
                 break;
             }
         }
-        return valueOfComparingPictures;
+        return compareValue;
     }
 
     public int compareIfBothSequencesAreHighCards(List<Card> firstPositionCards, List<Card> secondPositionCards) {
-        return compareNSortedCards(5, firstPositionCards, secondPositionCards);
-    }
+        List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsHighCard(firstPositionCards);
+        List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsHighCard(secondPositionCards);
 
-    public int compareValueOfNOfAKind(List<Card> firstPair, List<Card> secondPair) {
-        return cardService.compareValueOfTwoCards(firstPair.get(0), secondPair.get(0));
+        return compareValueIfBestSequenceIsReturnedAndBothSequencesAreTheSame(firstPlayerSequence, secondPlayerSequence);
     }
 
     public int compareIfBothSequencesArePairs(List<Card> firstPositionCards, List<Card> secondPositionCards) {
         List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsOnePair(firstPositionCards);
         List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsOnePair(secondPositionCards);
-        int compareValue = compareValueOfNOfAKind(firstPlayerSequence, secondPlayerSequence);
-        if (compareValue == 0) {
-            for (int i = 2; i < 5; i++) {
-                int cardsCompareValue = cardService.compareValueOfTwoCards(firstPlayerSequence.get(i), secondPlayerSequence.get(i));
-                if (cardsCompareValue != 0) {
-                    compareValue = cardsCompareValue;
-                    break;
-                }
-            }
-        }
-        return compareValue;
-
+        return compareValueIfBestSequenceIsReturnedAndBothSequencesAreTheSame(firstPlayerSequence, secondPlayerSequence);
     }
 
 
     public int compareIfBothSequencesAreTwoPairs(List<Card> firstPositionCards, List<Card> secondPositionCards) {
         List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsTwoPairs(firstPositionCards);
         List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsTwoPairs(secondPositionCards);
-        int compareValue = cardService.compareValueOfTwoCards(firstPlayerSequence.get(0), secondPlayerSequence.get(0));
-        if (compareValue == 0) {
-            compareValue = cardService.compareValueOfTwoCards(firstPlayerSequence.get(2), secondPlayerSequence.get(2));
-            if (compareValue == 0) {
-                compareValue = cardService.compareValueOfTwoCards(firstPlayerSequence.get(4), secondPlayerSequence.get(4));
-            }
-        }
-        return compareValue;
+        return compareValueIfBestSequenceIsReturnedAndBothSequencesAreTheSame(firstPlayerSequence, secondPlayerSequence);
     }
 
-    public List<Card> getThreeOfAKind(List<Card> cards) {
-        return cardService.getNOfAKind(3, cards);
+    public int compareIfBothSequencesAreThreeOfAKind(List<Card> firstPositionCards, List<Card> secondPositionCards) {
+        List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsThreeOfAKind(firstPositionCards);
+        List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsThreeOfAKind(secondPositionCards);
+        return compareValueIfBestSequenceIsReturnedAndBothSequencesAreTheSame(firstPlayerSequence, secondPlayerSequence);
+    }
+
+    public int compareIfBothSequencesAreStraight(List<Card> firstPositionCards, List<Card> secondPositionCards) {
+        List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsStraight(firstPositionCards);
+        List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsStraight(secondPositionCards);
+        return compareValueIfBestSequenceIsReturnedAndBothSequencesAreTheSame(firstPlayerSequence, secondPlayerSequence);
+    }
+
+    public int compareIfBothSequenceIsFlush(List<Card> firstPositionCards, List<Card> secondPositionCards) {
+        List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsFlush(firstPositionCards);
+        List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsFlush(secondPositionCards);
+        return compareValueIfBestSequenceIsReturnedAndBothSequencesAreTheSame(firstPlayerSequence, secondPlayerSequence);
+    }
+
+    public int compareIfBothSequenceIsFullHouse(List<Card> firstPositionCards, List<Card> secondPositionCards) {
+        List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsFullHouse(firstPositionCards);
+        List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsFullHouse(secondPositionCards);
+        return compareValueIfBestSequenceIsReturnedAndBothSequencesAreTheSame(firstPlayerSequence, secondPlayerSequence);
+    }
+
+    public int compareIfBothSequenceIsFourOfAKind(List<Card> firstPositionCards, List<Card> secondPositionCards) {
+        List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsFourOfAKind(firstPositionCards);
+        List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsFourOfAKind(secondPositionCards);
+        return compareValueIfBestSequenceIsReturnedAndBothSequencesAreTheSame(firstPlayerSequence, secondPlayerSequence);
+    }
+
+    public int compareIfBothSequenceIsPoker(List<Card> firstPositionCards, List<Card> secondPositionCards) {
+        List<Card> firstPlayerSequence = bestSequenceReturner.getSequenceIfItIsPoker(firstPositionCards);
+        List<Card> secondPlayerSequence = bestSequenceReturner.getSequenceIfItIsPoker(secondPositionCards);
+        return compareValueIfBestSequenceIsReturnedAndBothSequencesAreTheSame(firstPlayerSequence, secondPlayerSequence);
     }
 
 

@@ -61,24 +61,6 @@ public class SequenceCheckers {
         return isPairInCardsWithoutNSameCards(3, cards);
     }
 
-    public boolean isValueOfCardAtIndexNOnePointHigherThanItsPrevious(int nCard, List<Card> cards) {
-        Card card2 = cards.get(nCard);
-        Card card1 = cards.get(nCard - 1);
-        int valueOfCard2 = cardService.cardsValue().get(card2.getPicture());
-        int valueOfCard1 = cardService.cardsValue().get(card1.getPicture());
-        return valueOfCard2 - valueOfCard1 == 1;
-    }
-
-    public boolean areFiveCardsConsecutive(List<Card> cards) {
-        for (int i = 1; i < cards.size(); i++) {
-            if (!isValueOfCardAtIndexNOnePointHigherThanItsPrevious(i, cards)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
     public boolean isStraightSpecialCase(List<Card> cards) {
         for (int n = 2; n < 6; n++) {
             int finalN = n;
@@ -100,7 +82,7 @@ public class SequenceCheckers {
             for (int j = 0; j < 5; j++) {
                 cardsFrom_I_to_IplusJ.add(sortedCardsByValues.get(i + j));
             }
-            if (areFiveCardsConsecutive(cardsFrom_I_to_IplusJ)) {
+            if (cardService.areFiveCardsConsecutive(cardsFrom_I_to_IplusJ)) {
                 return true;
             } else {
                 cardsFrom_I_to_IplusJ.clear();

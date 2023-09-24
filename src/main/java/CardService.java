@@ -4,17 +4,17 @@ import java.util.stream.Collectors;
 public class CardService {
 
 
-    public  List<String> suits(){
-        return List.of("♠","♣","♦","♥");
+    public List<String> suits() {
+        return List.of("♠", "♣", "♦", "♥");
     }
 
-    public List<String> pictures(){
+    public List<String> pictures() {
         return List.of("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A");
     }
 
     public List<Card> getDeckOfCards() {
         List<Card> cards = new ArrayList<>();
-        List<String> pictures = pictures() ;
+        List<String> pictures = pictures();
         List<String> suits = suits();
         for (String suit : suits) {
             for (String picture : pictures) {
@@ -45,29 +45,41 @@ public class CardService {
         return (int) cards.stream().filter(c -> c.getPicture().equals(picture)).count();
     }
 
-    public int compareValueOfTwoCards(Card card1, Card card2){
+    public int compareValueOfTwoCards(Card card1, Card card2) {
         return Integer.compare(cardsValue().get(card1.getPicture()), cardsValue().get(card2.getPicture()));
     }
-    public Card getCardWithTheHighestValue(List<Card> cards) {
-        Card cardWithHighestValue = cards.get(0);
-        for (int i = 1; i < cards.size(); i++) {
-            if (compareValueOfTwoCards(cards.get(i),cards.get(i-1))>0) {
-                cardWithHighestValue = cards.get(i);
-            }
-        }
-        return cardWithHighestValue;
+
+    public boolean isValueOfCardAtIndexNOnePointHigherThanItsPrevious(int nCard, List<Card> cards) {
+        Card card2 = cards.get(nCard);
+        Card card1 = cards.get(nCard - 1);
+        int valueOfCard2 = cardsValue().get(card2.getPicture());
+        int valueOfCard1 = cardsValue().get(card1.getPicture());
+        return valueOfCard2 - valueOfCard1 == 1;
     }
 
-    public List<Card> sortedListOfCardsByItsValue(boolean ascending, List<Card> cards){
+    public boolean areFiveCardsConsecutive(List<Card> cards) {
+        for (int i = 1; i < cards.size(); i++) {
+            if (!isValueOfCardAtIndexNOnePointHigherThanItsPrevious(i, cards)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<Card> sortedListOfCardsByItsValue(boolean ascending, List<Card> cards) {
         List<Card> cardsToBeSorted = new ArrayList<>(cards);
         Comparator<Card> cardComparator = (card1, card2) -> {
             int value1 = cardsValue().get(card1.getPicture());
             int value2 = cardsValue().get(card2.getPicture());
             if (ascending) return Integer.compare(value1, value2);
-            return Integer.compare(value2,value1);
+            return Integer.compare(value2, value1);
         };
         cardsToBeSorted.sort(cardComparator);
         return cardsToBeSorted;
+    }
+
+    public Card getCardWithTheHighestValue(List<Card> cards) {
+        return sortedListOfCardsByItsValue(false, cards).get(0);
     }
 
     public boolean isNOfAKind(int n, List<Card> cards) {
@@ -81,12 +93,14 @@ public class CardService {
         return false;
     }
 
-    public List<Card> getNOfAKind(int n, List<Card> cards){
+    public List<Card> getHighestNOfAKind(int n, List<Card> cards) {
+        List<Card> playerCards = sortedListOfCardsByItsValue(false, cards);
         String picture = "";
-        for (int i = 0; i < cards.size(); i++) {
-            String pictureOfICard = cards.get(i).getPicture();
-            if (pictureCounter(pictureOfICard, cards) == n) {
+        for (int i = 0; i < playerCards.size(); i++) {
+            String pictureOfICard = playerCards.get(i).getPicture();
+            if (pictureCounter(pictureOfICard, playerCards) == n) {
                 picture = pictureOfICard;
+                break;
             }
         }
         String finalPicture = picture;
@@ -94,11 +108,11 @@ public class CardService {
     }
 
     public List<Card> getPair(List<Card> cards) {
-        return getNOfAKind(2,cards);
+        return getHighestNOfAKind(2, cards);
     }
 
-    public List<Card> getNHighestCards(int n, List<Card> cards){
-        List<Card> sortedCarts= sortedListOfCardsByItsValue(false, cards);
+    public List<Card> getNHighestCards(int n, List<Card> cards) {
+        List<Card> sortedCarts = sortedListOfCardsByItsValue(false, cards);
         List<Card> nCards = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             nCards.add(sortedCarts.get(i));
@@ -123,8 +137,8 @@ public class CardService {
         return flushMap;
     }
 
-    public String flushSuitRecognizer(List<Card> cards){
-        String  flushSuit = "";
+    public String flushSuitRecognizer(List<Card> cards) {
+        String flushSuit = "";
         List<String> suits = suits();
         Map<String, Boolean> flushMap = isFlushMap(cards);
         for (String suit : suits) {
@@ -135,11 +149,5 @@ public class CardService {
         return flushSuit;
     }
 
-//    boolean isThereSecondTriplet(List<Card> cards){
-//        List<Card> playerCard = new ArrayList<>(cards);
-//        List<Card> firstTriplet = getNOfAKind(3,playerCard);
-//        List<Card> leftovers = listOfCardsWithRemovedCardsWithGivenPicture(firstTriplet.get(0).getPicture(), playerCard);
-//        return isNOfAKind(3,leftovers);
-//    }
 
 }
