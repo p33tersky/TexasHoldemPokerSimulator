@@ -150,4 +150,17 @@ public class CardService {
     }
 
 
+    public boolean isSameCardRecognizer(Card card1 ,Card card2){
+        return card1.getSuit().equals(card2.getSuit()) && card1.getPicture().equals(card2.getPicture());
+    }
+
+    public boolean isGivenCardInGivenList(List<Card> cards, Card card){
+        for (int i = 0; i < cards.size(); i++) {
+            if (isSameCardRecognizer(cards.get(i), card)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
