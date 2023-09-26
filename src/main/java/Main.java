@@ -5,8 +5,7 @@ public class Main {
     public static void main(String[] args) {
 //      "♠", "♣", "♦", "♥"
         DealService dealService = new DealService();
-        SequenceCheckers sequenceCheckers = new SequenceCheckers();
-        BestSequenceReturner bestSequenceReturner = new BestSequenceReturner();
+
 
 //        tool simulating N games with two players
 //        dealService.simulateNGames(10);

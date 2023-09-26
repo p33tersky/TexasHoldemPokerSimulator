@@ -23,10 +23,10 @@ public class DealService {
             List<Card> secondPlayerCards = new ArrayList<>(List.of(position2.getCard1(), position2.getCard2()));
             secondPlayerCards.addAll(cardsOnTheTable);
 
-            System.out.println("Rozdanie " + i + ":");
-            System.out.println("Karty Gracza 1:" + position1.getCard1() + ", " + position1.getCard2());
-            System.out.println("Karty Gracza 2:" + position2.getCard1() + ", " + position2.getCard2());
-            System.out.println("Karty na stole: " + cardsOnTheTable);
+            System.out.println("Deal number " + i + ":");
+            System.out.println("Player 1 cards: " + position1.getCard1() + ", " + position1.getCard2());
+            System.out.println("Player 2 cards: " + position2.getCard1() + ", " + position2.getCard2());
+            System.out.println("Cards on the table: " + cardsOnTheTable);
             int compareValue = pokerSequenceComparator.compareSequences(firstPlayerCards, secondPlayerCards);
 
 
@@ -34,14 +34,14 @@ public class DealService {
             List<Card> firstPlayerSequence = pokerSequenceComparator.pokerHand(firstPlayerCards).getBestSequence();
             String secondSequenceName = pokerSequenceComparator.pokerHand(secondPlayerCards).getPokerSequenceType().sequenceName;
             List<Card> secondPlayerSequence = pokerSequenceComparator.pokerHand(secondPlayerCards).getBestSequence();
-            System.out.println("Gracz 1 ma " + firstSequenceName + ": " + firstPlayerSequence);
-            System.out.println("Gracz 2 ma " + secondSequenceName + ": " + secondPlayerSequence);
+            System.out.println("Player 1 has " + firstSequenceName + ": " + firstPlayerSequence);
+            System.out.println("Player 2 has " + secondSequenceName + ": " + secondPlayerSequence);
             if (compareValue == 1) {
-                System.out.println("Wygrał gracz 1");
+                System.out.println("Player 1 wins");
             } else if (compareValue == 0) {
-                System.out.println("Remis");
+                System.out.println("Draw");
             } else {
-                System.out.println("Wygrał gracz 2");
+                System.out.println("Player 2 wins");
             }
             System.out.println();
             System.out.println("****");
@@ -54,7 +54,8 @@ public class DealService {
 
     }
 
-    public Map<String, Boolean> sequenceNameToBooleanMap(List<Card> cards){
+    // not used but stayed for future improvement
+    public Map<String, Boolean> sequenceNameToBooleanMap(List<Card> cards) {
         Map<String, Boolean> xSequenceMap = new HashMap<>();
         xSequenceMap.put("poker", sequenceCheckers.isPoker(cards));
         xSequenceMap.put("four of a kind", sequenceCheckers.isFourOfAKind(cards));
@@ -66,15 +67,6 @@ public class DealService {
         xSequenceMap.put("pair", sequenceCheckers.isPair(cards));
         xSequenceMap.put("high card", sequenceCheckers.isHighCard(cards));
         return xSequenceMap;
-    }
-
-    public boolean is_SequenceX_inGivenCards(PokerSequenceType pokerSequenceType, List<Card> cards){
-        return sequenceNameToBooleanMap(cards).get(pokerSequenceType.getSequenceName());
-    }
-
-    public boolean isSequenceXInAnyoneCards(PokerSequenceType pokerSequenceType, List<Card> firstPlayerCards, List<Card> secondPlayerCards){
-        return is_SequenceX_inGivenCards(pokerSequenceType,firstPlayerCards) ||
-                is_SequenceX_inGivenCards(pokerSequenceType,secondPlayerCards);
     }
 
 
@@ -102,7 +94,6 @@ public class DealService {
             System.out.println("Player 2 cards: " + position2.getCard1() + ", " + position2.getCard2());
             System.out.println("Cards on the table: " + cardsOnTheTable);
             int compareValue = pokerSequenceComparator.compareSequences(firstPlayerCards, secondPlayerCards);
-
 
 
             String firstSequenceName = pokerSequenceComparator.pokerHand(firstPlayerCards).getPokerSequenceType().sequenceName;

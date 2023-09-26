@@ -19,7 +19,6 @@ public class SequenceCheckers {
     }
 
 
-
     public boolean isFourOfAKind(List<Card> cards) {
         return cardService.isNOfAKind(4, cards);
     }
@@ -111,8 +110,8 @@ public class SequenceCheckers {
         return isStraight(cardsInFlushColor);
     }
 
-    public boolean isHighCard(List<Card> cards){
+    public boolean isHighCard(List<Card> cards) {
         return !(isPoker(cards) || isFourOfAKind(cards) || isFullHouse(cards) || isFlush(cards) ||
-                isStraight(cards) || isThreeOfAKind(cards) || isTwoPairs(cards) || isPair(cards) );
+                isStraight(cards) || isThreeOfAKind(cards) || isTwoPairs(cards) || isPair(cards));
     }
 }

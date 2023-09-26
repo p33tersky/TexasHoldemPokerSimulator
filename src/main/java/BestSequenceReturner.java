@@ -65,7 +65,7 @@ public class BestSequenceReturner {
                 potentialStraight.add(cardsSortedDesc.get(i + j));
             }
             if (sequenceCheckers.isStraight(potentialStraight)) {
-                return  potentialStraight;
+                return potentialStraight;
             } else {
                 potentialStraight.clear();
             }
