@@ -57,9 +57,6 @@ public class BestSequenceReturner {
 
     public List<Card> getSequenceIfItIsStraight(List<Card> cards) {
         List<Card> cardsSortedDesc = cardService.sortedListOfCardsByItsValue(false, cards);
-        if (sequenceCheckers.isStraightSpecialCase(cards)) {
-            return returnStraightSpecialCaseSequence(cards);
-        }
         List<Card> straightSequence = new ArrayList<>();
         int size = cardsSortedDesc.size();
         for (int i = 0; i < size - 4; i++) {
@@ -68,13 +65,12 @@ public class BestSequenceReturner {
                 potentialStraight.add(cardsSortedDesc.get(i + j));
             }
             if (sequenceCheckers.isStraight(potentialStraight)) {
-                straightSequence = potentialStraight;
-                break;
+                return  potentialStraight;
             } else {
                 potentialStraight.clear();
             }
         }
-        return straightSequence;
+        return returnStraightSpecialCaseSequence(cards);
     }
 
     public List<Card> getSequenceIfItIsFlush(List<Card> cards) {
