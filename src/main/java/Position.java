@@ -15,4 +15,9 @@ public class Position {
     public Card getCard2() {
         return card2;
     }
+
+    @Override
+    public String toString() {
+        return "[" +card1 + ", " + card2+"]";
+    }
 }

@@ -55,4 +55,26 @@ public class PokerSequenceComparator {
             return pokerSubsequenceComparison.compareIfBothSequencesArePairs(firstPlayerCards, secondPlayerCards);
         return pokerSubsequenceComparison.compareIfBothSequencesAreHighCards(firstPlayerCards, secondPlayerCards);
     }
+
+    int[] compareNSequences(List<List<Card>> playersCards) {
+        int n = playersCards.size();
+        int[] compareTable = new int[n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j){
+                    if (compareSequences(playersCards.get(i), playersCards.get(j)) == 0) {
+                        compareTable[i] = 0;
+                        break;
+                    }
+                    if (compareSequences(playersCards.get(i), playersCards.get(j)) < 0) {
+                        compareTable[i] = -1;
+                        break;
+                    }
+                    compareTable[i] = 1;
+                }
+
+            }
+        }
+        return compareTable;
+    }
 }

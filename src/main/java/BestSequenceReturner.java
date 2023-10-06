@@ -57,7 +57,6 @@ public class BestSequenceReturner {
 
     public List<Card> getSequenceIfItIsStraight(List<Card> cards) {
         List<Card> cardsSortedDesc = cardService.sortedListOfCardsByItsValue(false, cards);
-        List<Card> straightSequence = new ArrayList<>();
         int size = cardsSortedDesc.size();
         for (int i = 0; i < size - 4; i++) {
             List<Card> potentialStraight = new ArrayList<>();
